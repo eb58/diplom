@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='de'>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Nicht-orientierbare Minimalflächen</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.1.0/math.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+    <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+    <script src='../js/math.js'></script>
+    <script src='../js/main.js'></script>
+</head>
+
+<body>
+    <div id="div1" style="width:90%;height:90%;"></div>
+    <div id="div2" style="width:90%;height:90%;"></div>
+    <script>
+        var layout = {
+            title: `Minimalfläche Beispiel1`,
+            margin: { l: -20, r: 20, t: -20, b: 20 },
+            xpaper_bgcolor: "LightSteelBlue",
+            showlegend: false,
+            scene: {
+                camera: {
+                    eye: { x: 1.86, y: 0.61, z: 0.98 }
+                }
+            }
+        };
+
+        const line = {
+            color: 'rgb(155, 128, 191)',
+            width: 0.6,
+            shape: 'spline',
+        }
+
+        if (1) {
+            const a = 0.6
+            const rawdata = circleGrid(1 / a, a, 0, 2 * Math.PI);
+            const data = [...rawdata, ...transpose(rawdata)].map(row => ({
+                type: 'scatter3d',
+                mode: 'lines',
+                x: row.map(r => r.re),
+                y: row.map(r => r.im),
+                z: row.map(r => 0),
+                line
+            }))
+            Plotly.newPlot('div1', data, layout);
+        }
+
+        const rawData = diplomBeispiel1(0.6)
+        const data1 = rawData.map(row => ({
+            type: 'scatter3d',
+            mode: 'lines',
+            x: row.map(r => r[0]),
+            y: row.map(r => r[1]),
+            z: row.map(r => r[2]),
+            opacity: 1,
+            line
+        }))
+
+        const data2 = transpose(rawData).map(row => ({
+            type: 'scatter3d',
+            mode: 'lines',
+            x: row.map(r => r[0]),
+            y: row.map(r => r[1]),
+            z: row.map(r => r[2]),
+            line
+        }))
+        Plotly.newPlot('div2', [...data1], layout);
+    </script>
+</body>
+
+</html>
